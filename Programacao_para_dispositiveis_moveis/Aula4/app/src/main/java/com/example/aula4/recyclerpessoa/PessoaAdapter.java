@@ -44,4 +44,9 @@ public class PessoaAdapter extends RecyclerView.Adapter<PessoaHolder> {
     public int getItemCount() {
         return pessoas != null ? pessoas.size() : 0;
     }
+
+    public void addItem(Pessoa pessoa){
+        PessoaDatatset.addPessoa(pessoa);
+        notifyItemInserted(getItemCount());
+    }
 }
