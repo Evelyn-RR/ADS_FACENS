@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import com.example.aula3.Usuario;
 
@@ -15,10 +16,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UsuarioRepository {
-    private static String INSET = "insert into usuario(nome,email,senha) values(?,?,?)";
-    private static String SELECT_ALL = "select * from usuario";
-    //private static String DELETE = "delete from usuario WHERE id = ?";
-    //private static String EDIT = "edit into usuario(nome,email,senha) values(?,?,?)";
+    private static String SELECT_ALL = "select * from tb_usuario";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -26,9 +24,9 @@ public class UsuarioRepository {
     @Autowired
     private EntityManager entityManager;
 
+    @Transactional
     public Usuario inserir(Usuario usuario){
-        jdbcTemplate.update(INSET, new Object[]
-            {usuario.getNome(), usuario.getEmail(), usuario.getSenha()});
+        entityManager.persist(usuario);
         return usuario;
     }
 
