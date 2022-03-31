@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 
 import com.example.aula3.Usuario;
 
@@ -23,8 +22,6 @@ public class UsuarioRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private EntityManager entityManager;
 
     public Usuario inserir(Usuario usuario){
         jdbcTemplate.update(INSET, new Object[]

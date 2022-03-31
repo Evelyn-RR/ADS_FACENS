@@ -1,26 +1,19 @@
 package com.example.aula3.repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import javax.persistence.TypedQuery;
 
-import com.example.aula3.Usuario;
+import com.example.aula3.entity.Usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class UsuarioRepository {
-    private static String SELECT_ALL = "select * from tb_usuario";
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
+   
     @Autowired
     private EntityManager entityManager;
 
@@ -30,19 +23,37 @@ public class UsuarioRepository {
         return usuario;
     }
 
-    public List<Usuario> obterTodos(){
-        return jdbcTemplate.query(SELECT_ALL, new RowMapper<Usuario>() {
-
-            @Override
-            public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Usuario(
-                    rs.getInt("id"),
-                    rs.getString("nome"),
-                    rs.getString("email"),
-                    rs.getString("senha")
-                    );
-            }            
-        });
+    @Transactional
+    public Usuario atualizar(Usuario usuario){
+        entityManager.merge(usuario);
+        return usuario;
     }
+
+    @Transactional
+    public void excluir(Usuario usuario){
+        entityManager.remove(usuario);
+    }
+
+    @Transactional
+    public void excluir(int id){
+        excluir(entityManager.find(Usuario.class, id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Usuario> obterPorNome(String nome){
+        String jpql = "select u from u where u.nome like :nome";
+        TypedQuery<Usuario> query = entityManager.createQuery(jpql, Usuario.class);
+        query.setParameter("nome", "%" + nome  + "%");
+        return query.getResultList();
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public List<Usuario> obterTodos(){
+          return entityManager.createQuery(" from Usuario", Usuario.class).getResultList();        
+    }
+
+
     
 }
