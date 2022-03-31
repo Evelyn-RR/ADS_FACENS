@@ -17,7 +17,7 @@ public class UsuarioRepository {
     private static String INSET = "insert into usuario(nome,email,senha) values(?,?,?)";
     private static String SELECT_ALL = "select * from usuario";
     private static String DELETE = "delete from usuario WHERE id = ?";
-    private static String EDIT = "update usuario set nome = admin, email = admin@admin.com, senha = 321 where id = 1";
+    private static String EDIT = "update usuario set nome = ?, email = ?, senha = ? where id = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -33,20 +33,33 @@ public class UsuarioRepository {
         jdbcTemplate.update(DELETE, id);
     }
 
-    public Usuario delete(Usuario usuario){
-        delete(jdbcTemplate.find(usuario, id));
+    public void delete(Usuario usuario){
+        delete(obterPorId( usuario.getId()));
     }
 
     public Usuario edit(Usuario usuario){
         this.jdbcTemplate.update(EDIT, new Object[]
-            {usuario.getNome(), usuario.getEmail(), usuario.getSenha()});
+            {usuario.getNome(), usuario.getEmail(), usuario.getSenha(), usuario.getId()});
         return usuario;
     }
 
-    public boolean(String email, String senha){
+    public boolean autenticar (String email, String senha){
 
     }
+    public Usuario obterPorId(int id){
+        return jdbcTemplate.queryForObject(SELECT_ALL + " where id = "+ id, new RowMapper<Usuario>() {
 
+            @Override
+            public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Usuario(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("email"),
+                    rs.getString("senha")
+                    );
+            }            
+        });
+    }
     public List<Usuario> obterTodos(){
         return jdbcTemplate.query(SELECT_ALL, new RowMapper<Usuario>() {
 
