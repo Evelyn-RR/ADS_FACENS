@@ -2,8 +2,9 @@ package com.example.aula3.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
-
+import java.util.Optional;
 
 import com.example.aula3.Usuario;
 
@@ -18,6 +19,10 @@ public class UsuarioRepository {
     private static String SELECT_ALL = "select * from usuario";
     private static String DELETE = "delete from usuario WHERE id = ?";
     private static String EDIT = "update usuario set nome = ?, email = ?, senha = ? where id = ?";
+    private static String AUTH = "select * from usuario where email = ? and senha = ? limit 1";
+
+
+    public record Autenticacao(String email, String senha) {}
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -43,9 +48,22 @@ public class UsuarioRepository {
         return usuario;
     }
 
-    public boolean autenticar (String email, String senha){
-
+    public Optional<Usuario> autenticar(Autenticacao autenticacao) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
+                    AUTH,
+                    new Object[]{autenticacao.email(), autenticacao.senha()},
+                    new int[]{Types.VARCHAR, Types.VARCHAR},
+                    (rs, rowNum) -> new Usuario(
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("email"),
+                            rs.getString("senha"))));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
+
     public Usuario obterPorId(int id){
         return jdbcTemplate.queryForObject(SELECT_ALL + " where id = "+ id, new RowMapper<Usuario>() {
 
@@ -60,6 +78,7 @@ public class UsuarioRepository {
             }            
         });
     }
+
     public List<Usuario> obterTodos(){
         return jdbcTemplate.query(SELECT_ALL, new RowMapper<Usuario>() {
 
