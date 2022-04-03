@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class Aula3Application {
+public class Aula4Application {
 
 	@Bean
 	public CommandLineRunner init (@Autowired UsuarioRepository usuarioRepository,
@@ -35,7 +35,7 @@ public class Aula3Application {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(Aula3Application.class, args);
+		SpringApplication.run(Aula4Application.class, args);
 	}
 
 }

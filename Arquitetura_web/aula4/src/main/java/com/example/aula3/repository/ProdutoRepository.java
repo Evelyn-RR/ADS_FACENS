@@ -5,51 +5,49 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import com.example.aula3.entity.Usuario;
+import com.example.aula3.entity.Produto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class UsuarioRepository {
-   
+public class ProdutoRepository {
     @Autowired
     private EntityManager entityManager;
 
     @Transactional
-    public Usuario inserir(Usuario usuario){
-        entityManager.persist(usuario);
-        return usuario;
+    public Produto inserir(Produto produto){
+        entityManager.persist(produto);
+        return produto;
     }
 
     @Transactional
-    public Usuario atualizar(Usuario usuario){
-        entityManager.merge(usuario);
-        return usuario;
+    public Produto atualizar(Produto produto){
+        entityManager.merge(produto);
+        return produto;
     }
 
     @Transactional
-    public void excluir(Usuario usuario){
-        entityManager.remove(usuario);
+    public void excluir(Produto produto){
+        entityManager.remove(produto);
     }
 
     @Transactional
     public void excluir(int id){
-        excluir(entityManager.find(Usuario.class, id));
+        excluir(entityManager.find(Produto.class, id));
     }
 
     @Transactional(readOnly = true)
-    public List<Usuario> obterPorNome(String nome){
+    public List<Produto> obterPorNome(String nome){
         String jpql = "select u from u where u.nome like :nome";
-        TypedQuery<Usuario> query = entityManager.createQuery(jpql, Usuario.class);
+        TypedQuery<Produto> query = entityManager.createQuery(jpql, Produto.class);
         query.setParameter("nome", "%" + nome  + "%");
         return query.getResultList();
     }
 
     @Transactional(readOnly = true)
-    public List<Usuario> obterTodos(){
-          return entityManager.createQuery(" from Usuario", Usuario.class).getResultList();        
+    public List<Produto> obterTodos(){
+          return entityManager.createQuery(" from Produto", Produto.class).getResultList();        
     }
-    
 }
