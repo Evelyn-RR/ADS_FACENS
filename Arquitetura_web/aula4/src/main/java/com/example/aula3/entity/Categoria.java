@@ -1,12 +1,13 @@
 package com.example.aula3.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,9 +20,8 @@ public class Categoria {
     @Column(length = 100)
     private String nome;
     private String descricao;
-    @ManyToOne
-    @JoinColumn(name = "produto_id")
-    private Produto produto;
+    @OneToMany(mappedBy = "categoria")
+    private List<Produto> produto;
     
     public Categoria(int id, String nome, String descricao) {
         this.id = id;
