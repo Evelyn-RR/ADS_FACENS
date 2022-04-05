@@ -1,15 +1,14 @@
 package com.example.aula3.repository;
 
-//import java.util.List;
+import java.util.List;
 
 import javax.persistence.EntityManager;
-//import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
-
+import javax.persistence.TypedQuery;
 import com.example.aula3.entity.Categoria;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class CategoriaRepository {
@@ -38,9 +37,9 @@ public class CategoriaRepository {
         excluir(entityManager.find(Categoria.class, id));
     }
 
-    /*@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<Categoria> obterPorNome(String nome){
-        String jpql = "select u from u where u.nome like :nome";
+        String jpql = "select c from categoria c where c.nome like :nome";
         TypedQuery<Categoria> query = entityManager.createQuery(jpql, Categoria.class);
         query.setParameter("nome", "%" + nome  + "%");
         return query.getResultList();
@@ -48,6 +47,6 @@ public class CategoriaRepository {
 
     @Transactional(readOnly = true)
     public List<Categoria> obterTodos(){
-          return entityManager.createQuery(" from Categoria", Categoria.class).getResultList();        
-    }*/
+          return entityManager.createQuery("from Categoria", Categoria.class).getResultList();        
+    }
 }

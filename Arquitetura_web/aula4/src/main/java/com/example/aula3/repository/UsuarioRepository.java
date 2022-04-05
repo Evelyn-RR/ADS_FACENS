@@ -41,7 +41,7 @@ public class UsuarioRepository {
 
     @Transactional(readOnly = true)
     public List<Usuario> obterPorNome(String nome){
-        String jpql = "select u from u where u.nome like :nome";
+        String jpql = "select u from usuario where u.nome like :nome";
         TypedQuery<Usuario> query = entityManager.createQuery(jpql, Usuario.class);
         query.setParameter("nome", "%" + nome  + "%");
         return query.getResultList();
