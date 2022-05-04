@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 
 import com.example.aula3.validation.constraint.NomePerfilValidator;
 
@@ -14,5 +15,7 @@ import com.example.aula3.validation.constraint.NomePerfilValidator;
 @Constraint(validatedBy = NomePerfilValidator.class)
 
 public @interface NomePerfil {
-    
+    String message() default "Nome fora do padão";
+    Class<?>[] groups() default{};
+    Class<? extends Payload>[] payload() default{};
 }
