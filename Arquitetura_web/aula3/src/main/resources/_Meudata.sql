@@ -4,5 +4,4 @@ create table usuario(
    email varchar(100) not null,
    senha varchar(100) not null
 );
-
 insert into usuario(nome,email,senha) values('Admin','admin@admin.com','123321');
